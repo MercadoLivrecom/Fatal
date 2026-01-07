@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Pagamento PIX – Plano VIP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f4f4f4;
+    color: #333;
+}
+
+/* CABEÇALHO */
+header {
+    background: #ffffff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 12px 0;
+}
+.header-container {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+}
+.header-container img {
+    height: 42px;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 720px;
+    margin: 25px auto;
+    background: #ffffff;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    text-align: center;
+}
+
+.subtitle {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+/* INSTRUÇÕES */
+.steps {
+    background: #fafafa;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.steps p {
+    font-size: 14px;
+    margin: 8px 0;
+}
+
+/* PIX */
+.pix-box {
+    border: 2px dashed #c2185b;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    word-break: break-all;
+    cursor: pointer;
+    background: #fff3f6;
+}
+.copy-btn {
+    margin-top: 12px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    background: linear-gradient(135deg, #c2185b, #e91e63);
+    color: #ffffff;
+    cursor: pointer;
+}
+
+/* QR */
+.qr {
+    text-align: center;
+    margin: 22px 0;
+}
+.qr img {
+    max-width: 220px;
+}
+
+/* TIMER */
+.timer {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #c2185b;
+    margin-top: 10px;
+}
+
+/* EXTRATO */
+.statement {
+    margin-top: 25px;
+    background: #fafafa;
+    border-radius: 12px;
+    padding: 18px;
+    font-size: 14px;
+}
+.statement h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+.statement p {
+    margin: 6px 0;
+}
+.statement .line {
+    display: flex;
+    justify-content: space-between;
+}
+.total {
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+/* RODAPÉ */
+footer {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px 14px;
+    font-size: 13px;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-container">
+        <img src="logo.webp" alt="Fatal Model">
+    </div>
+</header>
+
+<div class="container">
+
+    <h1>Pagamento via PIX</h1>
+    <p class="subtitle">Plano VIP Vitalício • Pagamento único</p>
+
+    <div class="steps">
+        <p><strong>1.</strong> Copie a chave PIX abaixo.</p>
+        <p><strong>2.</strong> Acesse o aplicativo do seu banco.</p>
+        <p><strong>3.</strong> Vá em PIX → Copia e Cola e finalize o pagamento.</p>
+    </div>
+
+    <div class="pix-box" id="pixKey">
+00020126980014br.gov.bcb.pix01225749725@vakinha.com.br0250Compra do plano vip vitalicio da fatal model espec52040000530398654045.995802BR5911Fatal model6009Sao Paulo62070503***63047D62
+    </div>
+
+    <button class="copy-btn" onclick="copyPix()">Copiar chave PIX</button>
+
+    <div class="qr">
+        <img src="qr.webp" alt="QR Code PIX">
+        <p>Escaneie o QR Code se preferir</p>
+    </div>
+
+    <div class="timer" id="timer">Tempo restante: 05:00</div>
+
+    <!-- EXTRATO -->
+    <div class="statement">
+        <h2>Resumo da Transação</h2>
+
+        <p><strong>Nome:</strong> <span id="nome"></span></p>
+        <p><strong>Telefone:</strong> <span id="telefone"></span></p>
+        <p><strong>E-mail:</strong> xxxxxxx@xxxxx.com</p>
+
+        <hr>
+
+        <div class="line">
+            <span>Taxa</span>
+            <span>R$ 0,00</span>
+        </div>
+        <div class="line total">
+            <span>Valor total</span>
+            <span>R$ 5,99</span>
+        </div>
+
+        <hr>
+
+        <p><strong>Detalhes do Plano:</strong></p>
+        <p>
+            • Selo VIP de destaque<br>
+            • Prioridade em anúncios<br>
+            • Participação em promoções e sorteios<br>
+            • Maior visibilidade no perfil
+        </p>
+
+        <p><strong>Observação:</strong> O pagamento é efetuado
+        <strong>somente uma vez</strong>, sem cobranças mensais ou renovações automáticas.</p>
+
+        <p><strong>CNPJ:</strong> 37.181.811/0001-46</p>
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Fatal Model <br>
+    Pagamento seguro via PIX <br>
+    WhatsApp: (11) 94533-6003
+</footer>
+
+<script>
+/* PEGAR PARÂMETROS */
+const params = new URLSearchParams(window.location.search);
+document.getElementById("nome").textContent = params.get("nome") || "—";
+document.getElementById("telefone").textContent = params.get("telefone") || "—";
+
+/* COPIAR PIX */
+function copyPix() {
+    const text = document.getElementById("pixKey").innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Chave PIX copiada com sucesso!");
+    });
+}
+document.getElementById("pixKey").addEventListener("click", copyPix);
+
+/* TIMER */
+let time = 300;
+const timerEl = document.getElementById("timer");
+setInterval(() => {
+    const m = String(Math.floor(time / 60)).padStart(2, '0');
+    const s = String(time % 60).padStart(2, '0');
+    timerEl.textContent = `Tempo restante: ${m}:${s}`;
+    if (time > 0) time--;
+}, 1000);
+</script>
+
+</body>
+</html>
