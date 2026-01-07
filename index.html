@@ -11,7 +11,7 @@
 
 <!-- Preview WhatsApp -->
 <meta property="og:title" content="Plano Premium VIP">
-<meta property="og:description" content="Ative o Plano Premium por apenas R$ 5,99 e concorra a prêmios exclusivos. Oferta limitada.">
+<meta property="og:description" content="Ative o Plano Premium por apenas R$ 5,99 e concorra a prêmios exclusivos.">
 <meta property="og:image" content="logo.webp">
 
 <!-- Fontes -->
@@ -27,7 +27,7 @@ body {
     color: #333;
 }
 
-/* ===== CABEÇALHO ===== */
+/* CABEÇALHO */
 header {
     background: #fff;
     border-bottom: 1px solid #e6e6e6;
@@ -51,7 +51,7 @@ header {
     height: 34px;
 }
 
-/* ===== CONTAINER ===== */
+/* CONTAINER */
 .container {
     max-width: 560px;
     margin: 20px auto;
@@ -70,8 +70,10 @@ header {
     object-fit: cover;
     border: 4px solid #e91e63;
     margin-bottom: 12px;
+    display: none;
 }
 
+/* TEXTOS */
 h1 {
     font-family: 'Poppins', sans-serif;
     font-size: 22px;
@@ -149,7 +151,6 @@ input {
 .notice {
     margin-top: 16px;
     font-size: 14px;
-    text-align: center;
     line-height: 1.6;
 }
 
@@ -159,11 +160,11 @@ input {
     margin-top: 10px;
     font-size: 14px;
     color: #d81b60;
-    text-decoration: none;
     font-weight: 500;
+    text-decoration: none;
 }
 
-/* ===== RODAPÉ ===== */
+/* RODAPÉ */
 footer {
     background: #000;
     color: #fff;
@@ -183,18 +184,16 @@ footer p {
 
 <header>
     <div class="menu" onclick="abrirSite()">☰</div>
-
     <div class="logo" onclick="abrirSite()">
         <img src="logo.webp" alt="Logo">
     </div>
-
     <div style="width:22px;"></div>
 </header>
 
 <div class="container">
 
-    <img id="profileImage" class="profile-img"
-         src="https://i.postimg.cc/bYCvgMZ4/cropped-e-acompanhante-clara-perfil-1766608753.jpg">
+    <!-- IMAGEM SOMENTE VIA URL -->
+    <img id="profileImage" class="profile-img">
 
     <h1 id="welcomeText"></h1>
 
@@ -254,22 +253,32 @@ function param(n) {
     return new URLSearchParams(window.location.search).get(n);
 }
 
-const nome = param('nome') || 'Cliente';
-const telefone = param('telefone') || '';
+const nome = param('nome');
+const telefone = param('telefone');
 const foto = param('foto');
 
-document.getElementById('nome').value = nome;
-document.getElementById('telefone').value = telefone;
-document.getElementById('welcomeText').innerText =
-`Olá ${nome}, você acaba de ser escolhido(a)`;
+if (nome) {
+    document.getElementById('nome').value = nome;
+    document.getElementById('welcomeText').innerText =
+    `Olá ${nome}, você acaba de ser escolhido(a)`;
+}
+
+if (telefone) {
+    document.getElementById('telefone').value = telefone;
+}
 
 if (foto) {
-    document.getElementById('profileImage').src = decodeURIComponent(foto);
+    const img = document.getElementById('profileImage');
+    img.src = decodeURIComponent(foto);
+    img.style.display = "block";
 }
 
 function pagar() {
+    const nomeVal = document.getElementById('nome').value;
+    const telVal = document.getElementById('telefone').value;
+
     window.location.href =
-    `pagar.html?nome=${encodeURIComponent(nome)}&telefone=${encodeURIComponent(document.getElementById('telefone').value)}`;
+    `pagar.html?nome=${encodeURIComponent(nomeVal)}&telefone=${encodeURIComponent(telVal)}`;
 }
 
 function abrirSite() {
