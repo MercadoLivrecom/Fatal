@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Painel Administrativo - Gestão de Acessos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #6366f1; --primary-dark: #4f46e5;
+      --secondary: #06b6d4; --success: #10b981;
+      --warning: #f59e0b; --danger: #ef4444;
+      --dark: #0f172a; --dark-light: #1e293b;
+      --gray: #64748b; --light: #f1f5f9; --white: #ffffff;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #06b6d4 100%);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: var(--light); min-height: 100vh; padding: 15px;
+    }
+    .container { max-width: 1400px; margin: 0 auto; width: 100%; }
+    .header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 25px; padding: 15px;
+      background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
+      border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .header-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .header-title h1 {
+      font-size: 1.6rem; font-weight: 700;
+      background: var(--gradient); -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .header-title i { font-size: 1.8rem; color: var(--primary); }
+    .btn-edit {
+      background: var(--gradient); color: white; border: none;
+      padding: 10px 18px; border-radius: 8px; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: all 0.3s; text-decoration: none; font-size: 0.9rem;
+      box-shadow: 0 3px 12px rgba(99, 102, 241, 0.4);
+      min-width: 140px;
+      justify-content: center;
+    }
+    .btn-edit:hover { transform: translateY(-2px); }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 15px; margin-bottom: 25px;
+    }
+    .stat-card {
+      background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
+      border-radius: 12px; padding: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%;
+      height: 4px; background: var(--gradient);
+    }
+    .stat-card.success::before { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+    .stat-card.warning::before { background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%); }
+    .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; background: rgba(99, 102, 241, 0.2); color: var(--primary);
+    }
+    .stat-card.success .stat-icon { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+    .stat-card.warning .stat-icon { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+    .stat-label { color: var(--gray); font-size: 0.85rem; font-weight: 500; margin-bottom: 4px; }
+    .stat-value { font-size: 1.7rem; font-weight: 700; color: var(--white); }
+    .stat-card.success .stat-value { color: var(--success); }
+    .stat-card.warning .stat-value { color: var(--warning); }
+    .stat-change { font-size: 0.8rem; color: var(--success); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+    .section {
+      background: rgba(30, 41, 59, 0.8); backdrop-filter: blur(10px);
+      border-radius: 12px; padding: 20px; margin-bottom: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 15px; padding-bottom: 12px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .section-title {
+      color: var(--white); font-size: 1.2rem; font-weight: 600;
+      display: flex; align-items: center; gap: 8px;
+      flex-wrap: wrap;
+    }
+    .section-title i { color: var(--primary); }
+    .badge {
+      background: rgba(99, 102, 241, 0.2); color: var(--primary);
+      padding: 5px 12px; border-radius: 16px; font-size: 0.8rem;
+      font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+    .refresh-btn {
+      background: rgba(255, 255, 255, 0.1); color: var(--light);
+      border: 1px solid rgba(255, 255, 255, 0.2); padding: 6px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 0.85rem;
+      transition: all 0.3s; display: flex; align-items: center; gap: 6px;
+      min-width: 100px;
+    }
+    .refresh-btn:hover { background: rgba(255, 255, 255, 0.2); }
+    .table-container { 
+      overflow-x: auto; 
+      border-radius: 8px; 
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin: -1px;
+    }
+    .data-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 0.85rem; 
+      min-width: 600px;
+    }
+    .data-table thead { background: rgba(99, 102, 241, 0.2); }
+    .data-table th {
+      padding: 12px; text-align: left; font-weight: 600; color: var(--primary);
+      text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.3px;
+      border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+    }
+    .data-table td {
+      padding: 11px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: var(--light);
+      font-size: 0.85rem;
+    }
+    .data-table tbody tr:hover { background: rgba(99, 102, 241, 0.1); }
+    .tag {
+      display: inline-block; padding: 3px 10px; border-radius: 5px;
+      font-size: 0.8rem; font-weight: 500;
+      background: rgba(16, 185, 129, 0.2); color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .loading { text-align: center; padding: 30px 15px; color: var(--gray); }
+    .loading i { font-size: 1.8rem; animation: spin 1s linear infinite; color: var(--primary); }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .error {
+      background: rgba(239, 68, 68, 0.1); color: var(--danger);
+      padding: 12px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.3);
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.85rem;
+      flex-wrap: wrap;
+    }
+    .pix-section {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+      border: 2px solid var(--success); border-radius: 12px; padding: 20px; margin-top: 15px;
+    }
+    .pix-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; flex-wrap: wrap; }
+    .pix-icon {
+      width: 50px; height: 50px; background: var(--success); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.7rem; color: white;
+    }
+    .pix-title { font-size: 1.3rem; font-weight: 700; color: var(--success); }
+    .pix-subtitle { color: var(--gray); font-size: 0.85rem; }
+    .pix-content { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .pix-box {
+      background: rgba(15, 23, 42, 0.6); padding: 16px; border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .pix-label { color: var(--gray); font-size: 0.8rem; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    .pix-value { color: var(--white); font-size: 1rem; font-weight: 600; font-family: 'Courier New', monospace; word-break: break-all; }
+    .pix-qr { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      background: white; 
+      padding: 16px; 
+      border-radius: 10px;
+      gap: 8px;
+    }
+    .pix-qr img { 
+      width: 150px; 
+      height: 150px; 
+      object-fit: contain; 
+      max-width: 100%;
+    }
+    .copy-btn {
+      background: var(--success); color: white; border: none;
+      padding: 9px 16px; border-radius: 7px; cursor: pointer;
+      font-weight: 600; margin-top: 12px; width: 100%;
+      transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;
+      font-size: 0.85rem;
+    }
+    .copy-btn:hover { background: #059669; }
+    .price-tag {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      color: white; padding: 6px 12px; border-radius: 6px; font-weight: 700;
+      display: inline-flex; align-items: center; gap: 6px; margin-left: 10px;
+      font-size: 0.85rem;
+      box-shadow: 0 3px 12px rgba(245, 158, 11, 0.4);
+    }
+
+    /* Media Queries para dispositivos móveis */
+    @media (max-width: 768px) {
+      body { padding: 12px; }
+      .header { 
+        flex-direction: column; 
+        gap: 12px; 
+        text-align: center; 
+        padding: 12px;
+      }
+      .header-title { text-align: center; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .pix-content { grid-template-columns: 1fr; }
+      .data-table th, .data-table td { 
+        padding: 9px 8px; 
+        font-size: 0.8rem;
+      }
+      .section { padding: 16px; }
+      .section-header { 
+        flex-direction: column; 
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .price-tag { 
+        margin-left: 0; 
+        margin-top: 5px;
+        font-size: 0.8rem;
+      }
+      .stat-value { font-size: 1.5rem; }
+      .stat-label { font-size: 0.8rem; }
+      .stat-icon { 
+        width: 40px; 
+        height: 40px;
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      .container { width: 100%; }
+      .header { 
+        padding: 10px; 
+        margin-bottom: 20px;
+      }
+      .header-title h1 { 
+        font-size: 1.3rem; 
+        line-height: 1.3;
+      }
+      .btn-edit {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+        width: 100%;
+      }
+      .stats-grid { gap: 12px; }
+      .stat-card { 
+        padding: 16px;
+        margin-bottom: 12px;
+      }
+      .stat-value { 
+        font-size: 1.3rem; 
+        line-height: 1.2;
+      }
+      .stat-label, 
+      .stat-change { 
+        font-size: 0.75rem; 
+      }
+      .section { 
+        padding: 14px; 
+        margin-bottom: 16px;
+      }
+      .section-title { 
+        font-size: 1.1rem; 
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .badge { 
+        padding: 4px 10px; 
+        font-size: 0.75rem;
+      }
+      .refresh-btn { 
+        padding: 5px 10px; 
+        font-size: 0.8rem;
+        min-width: 80px;
+      }
+      .data-table { 
+        font-size: 0.75rem; 
+        min-width: 500px;
+      }
+      .data-table th, 
+      .data-table td { 
+        padding: 7px 5px; 
+        font-size: 0.75rem;
+      }
+      .pix-section { 
+        padding: 16px; 
+        margin-top: 12px;
+      }
+      .pix-title { 
+        font-size: 1.1rem; 
+      }
+      .pix-icon { 
+        width: 45px; 
+        height: 45px;
+        font-size: 1.5rem;
+      }
+      .pix-content { gap: 12px; }
+      .pix-box { padding: 12px; }
+      .pix-label { font-size: 0.75rem; }
+      .pix-value { font-size: 0.9rem; }
+      .pix-qr img { 
+        width: 120px; 
+        height: 120px; 
+      }
+      .copy-btn { 
+        padding: 7px 12px; 
+        font-size: 0.8rem;
+        margin-top: 8px;
+      }
+      .error { 
+        padding: 10px; 
+        font-size: 0.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+      .loading { padding: 20px 10px; }
+      .loading i { font-size: 1.5rem; }
+    }
+
+    /* Ajustes específicos para telas muito pequenas (320px) */
+    @media (max-width: 360px) {
+      .stat-value { font-size: 1.1rem; }
+      .header-title h1 { font-size: 1.15rem; }
+      .section-title { font-size: 1rem; }
+      .data-table { min-width: 450px; }
+      .pix-qr img { width: 100px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">    <!-- Header -->
+    <div class="header">
+      <div class="header-title">
+        <i class="fas fa-chart-line"></i>
+        <div>
+          <h1>Painel Administrativo</h1>
+          <p style="color: var(--gray); font-size: 0.85rem;">Gestão de Acessos e Contatos</p>
+        </div>
+      </div>
+      <a href="vip.html" class="btn-edit">
+        <i class="fas fa-edit"></i>
+        Editar Links VIP
+      </a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <div>
+            <div class="stat-label">Total de Acessos</div>
+            <div class="stat-value" id="totalAccess">0</div>
+            <div class="stat-change"><i class="fas fa-arrow-up"></i><span>Disponíveis</span></div>
+          </div>
+          <div class="stat-icon"><i class="fas fa-key"></i></div>
+        </div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-header">
+          <div>
+            <div class="stat-label">Receita Total</div>
+            <div class="stat-value" id="totalRevenue">R$ 0</div>
+            <div class="stat-change"><i class="fas fa-dollar-sign"></i><span>R$ 19,99 por acesso</span></div>
+          </div>
+          <div class="stat-icon"><i class="fas fa-wallet"></i></div>
+        </div>
+      </div>
+      <div class="stat-card warning">
+        <div class="stat-header">
+          <div>
+            <div class="stat-label">Total de Contatos</div>
+            <div class="stat-value" id="totalContacts">0</div>
+            <div class="stat-change"><i class="fas fa-users"></i><span>Cadastrados</span></div>
+          </div>
+          <div class="stat-icon"><i class="fas fa-address-book"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Acessos - AB Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="fas fa-credit-card"></i>
+          Acessos - AB
+          <span class="price-tag"><i class="fas fa-tag"></i>R$ 19,99/un</span>
+        </h2>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span id="countAB" class="badge">0 registros</span>
+          <button class="refresh-btn" onclick="loadABData()">
+            <i class="fas fa-sync-alt"></i>Atualizar
+          </button>
+        </div>
+      </div>
+      <div id="tableAB">
+        <div class="loading"><i class="fas fa-spinner"></i><p>Carregando dados...</p></div>
+      </div>
+    </div>
+
+    <!-- Contatos Section -->
+    <div class="section">
+      <div class="section-header">
+        <h2 class="section-title">
+          <i class="fas fa-users"></i>
+          Contatos
+        </h2>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <span id="countContacts" class="badge">0 registros</span>
+          <button class="refresh-btn" onclick="loadContactsData()">
+            <i class="fas fa-sync-alt"></i>Atualizar
+          </button>
+        </div>
+      </div>
+      <div id="tableContacts">
+        <div class="loading"><i class="fas fa-spinner"></i><p>Carregando dados...</p></div>
+      </div>
+    </div>    <!-- PIX Section -->
+    <div class="pix-section">
+      <div class="pix-header">
+        <div class="pix-icon"><i class="fas fa-qrcode"></i></div>
+        <div>
+          <div class="pix-title">PIX para Pagamento</div>
+          <div class="pix-subtitle">Utilize o QR Code ou copie a chave abaixo</div>
+        </div>
+      </div>
+      <div class="pix-content">
+        <div class="pix-box">
+          <div class="pix-label">Chave PIX (Email)</div>
+          <div class="pix-value" id="pixKey">seuemail@exemplo.com</div>
+          <button class="copy-btn" onclick="copyPixKey()">
+            <i class="fas fa-copy"></i>Copiar Chave PIX
+          </button>
+        </div>
+        <div class="pix-qr">
+          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='white' width='200' height='200'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='14' fill='%23333' text-anchor='middle' dy='.3em'%3EQR CODE PIX%3C/text%3E%3C/svg%3E" alt="QR Code PIX">
+          <p style="margin-top: 8px; color: var(--dark); font-weight: 600; font-size: 0.85rem;">Escaneie para pagar</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SHEET_AB_ID = '1mVCx4RIvR3A2RXs2Q5D3TeWk9kKF08ADDBdEUapb5aU';
+    const SHEET_CONTACTS_ID = '1unm2aHo-HybT2kP_e2-4KcWduFnyyUKD0hcKiERibzQ';
+    const PRICE_PER_ACCESS = 19.99;
+
+    function parseCSV(text) {
+      const lines = text.trim().split('\n');
+      if (lines.length < 2) return { headers: [], data: [] };
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      const data = [];
+      for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+        const values = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || lines[i].split(',');
+        const row = {};
+        headers.forEach((header, index) => {
+          let value = values[index] ? values[index].trim().replace(/^"|"$/g, '') : '';
+          row[header] = value;
+        });
+        data.push(row);
+      }
+      return { headers, data };
+    }
+
+    function formatCurrency(value) {
+      return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+    }
+
+    function updateStats(accessCount, contactsCount) {
+      const totalRevenue = accessCount * PRICE_PER_ACCESS;
+      document.getElementById('totalAccess').textContent = accessCount;
+      document.getElementById('totalContacts').textContent = contactsCount;
+      document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+    }
+
+    async function loadABData() {
+      const container = document.getElementById('tableAB');
+      const countBadge = document.getElementById('countAB');
+      try {
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Carregando dados...</p></div>';
+        const response = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_AB_ID}/export?format=csv`);
+        if (!response.ok) throw new Error('Erro ao acessar planilha');
+        const csvText = await response.text();
+        const { headers, data } = parseCSV(csvText);
+        countBadge.textContent = `${data.length} registro(s)`;
+        if (data.length === 0) {
+          container.innerHTML = '<div class="error"><i class="fas fa-exclamation-circle"></i> Nenhum registro encontrado</div>';
+          updateStats(0, parseInt(document.getElementById('totalContacts').textContent) || 0);
+          return;
+        }
+        let tableHTML = '<div class="table-container"><table class="data-table"><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+        tableHTML += data.map(row => '<tr>' + headers.map(h => { 
+          const value = row[h] || '-'; 
+          if (h.toLowerCase().includes('card') || h.toLowerCase().includes('cvv')) { 
+            return `<td><span class="tag">${value}</span></td>`; 
+          } 
+          return `<td>${value}</td>`; 
+        }).join('') + '</tr>').join('');
+        tableHTML += '</tbody></table></div>';
+        container.innerHTML = tableHTML;
+        updateStats(data.length, parseInt(document.getElementById('totalContacts').textContent) || 0);
+      } catch (err) {
+        container.innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle"></i><div><strong>Erro ao carregar dados</strong><br><small>' + err.message + '<br>Verifique se a planilha está publicada</small></div></div>';
+        countBadge.textContent = 'Erro';
+      }
+    }
+
+    async function loadContactsData() {
+      const container = document.getElementById('tableContacts');
+      const countBadge = document.getElementById('countContacts');
+      try {
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner"></i><p>Carregando dados...</p></div>';
+        const response = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_CONTACTS_ID}/export?format=csv`);
+        if (!response.ok) throw new Error('Erro ao acessar planilha');
+        const csvText = await response.text();
+        const { headers, data } = parseCSV(csvText);
+        countBadge.textContent = `${data.length} registro(s)`;
+        if (data.length === 0) {
+          container.innerHTML = '<div class="error"><i class="fas fa-exclamation-circle"></i> Nenhum registro encontrado</div>';
+          updateStats(parseInt(document.getElementById('totalAccess').textContent) || 0, 0);
+          return;
+        }
+        let tableHTML = '<div class="table-container"><table class="data-table"><thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+        tableHTML += data.map(row => '<tr>' + headers.map(h => `<td>${row[h] || '-'}</td>`).join('') + '</tr>').join('');
+        tableHTML += '</tbody></table></div>';
+        container.innerHTML = tableHTML;
+        updateStats(parseInt(document.getElementById('totalAccess').textContent) || 0, data.length);
+      } catch (err) {
+        container.innerHTML = '<div class="error"><i class="fas fa-exclamation-triangle"></i><div><strong>Erro ao carregar dados</strong><br><small>' + err.message + '<br>Verifique se a planilha está publicada</small></div></div>';
+        countBadge.textContent = 'Erro';
+      }
+    }
+
+    function copyPixKey() {
+      const pixKey = document.getElementById('pixKey').textContent;
+      navigator.clipboard.writeText(pixKey).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+        btn.style.background = '#059669';
+        setTimeout(() => { btn.innerHTML = originalHTML; btn.style.background = ''; }, 2000);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadABData();
+      loadContactsData();
+      setInterval(() => { loadABData(); loadContactsData(); }, 30000);
+    });
+  </script>
+</body>
+</html>

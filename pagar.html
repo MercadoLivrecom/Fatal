@@ -1,249 +1,646 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Pagamento PIX – Plano VIP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Fatal Model pagamentos</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="icon" href="fabicon.jpg" type="image/jpeg">
 
-<style>
-* { box-sizing: border-box; }
+    <style>
+        * { 
+            box-sizing: border-box; 
+            margin: 0;
+            padding: 0;
+        }
 
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: #f4f4f4;
-    color: #333;
-}
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Inter', 'Poppins', sans-serif;
+            padding-top: 80px;
+        }
 
-/* CABEÇALHO */
-header {
-    background: #ffffff;
-    border-bottom: 1px solid #e5e5e5;
-    padding: 12px 0;
-}
-.header-container {
-    max-width: 900px;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-}
-.header-container img {
-    height: 42px;
-}
+        /* CABEÇALHO */
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
 
-/* CONTAINER */
-.container {
-    max-width: 720px;
-    margin: 25px auto;
-    background: #ffffff;
-    padding: 24px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-}
+        .header-container {
+            max-width: 900px;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+            padding: 12px 0;
+        }
 
-h1 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 22px;
-    text-align: center;
-}
+        .header-container img {
+            height: 42px;
+            object-fit: contain;
+        }
 
-.subtitle {
-    text-align: center;
-    font-size: 15px;
-    margin-bottom: 20px;
-}
+        /* CONTEÚDO PRINCIPAL */
+        .main-container {
+            max-width: 900px;
+            width: 100%;
+            padding: 24px 20px;
+            text-align: center;
+        }
 
-/* INSTRUÇÕES */
-.steps {
-    background: #fafafa;
-    border-radius: 10px;
-    padding: 16px;
-    margin-bottom: 20px;
-}
-.steps p {
-    font-size: 14px;
-    margin: 8px 0;
-}
+        /* MENSAGEM DE BOAS-VINDAS */
+        .welcome-message {
+            font-size: 1.25rem;
+            color: #1a1a1a;
+            margin-bottom: 32px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
 
-/* PIX */
-.pix-box {
-    border: 2px dashed #c2185b;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 13px;
-    word-break: break-all;
-    cursor: pointer;
-    background: #fff3f6;
-}
-.copy-btn {
-    margin-top: 12px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    background: linear-gradient(135deg, #c2185b, #e91e63);
-    color: #ffffff;
-    cursor: pointer;
-}
+        .welcome-message strong {
+            color: #000;
+            font-weight: 600;
+        }
 
-/* QR */
-.qr {
-    text-align: center;
-    margin: 22px 0;
-}
-.qr img {
-    max-width: 220px;
-}
+        /* MENU DE PAGAMENTO */
+        .payment-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto 32px auto;
+        }
 
-/* TIMER */
-.timer {
-    text-align: center;
-    font-size: 16px;
-    font-weight: 500;
-    color: #c2185b;
-    margin-top: 10px;
-}
+        .payment-option {
+            background: #ffffff;
+            border: 2px solid #e5e5e5;
+            border-radius: 16px;
+            padding: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
 
-/* EXTRATO */
-.statement {
-    margin-top: 25px;
-    background: #fafafa;
-    border-radius: 12px;
-    padding: 18px;
-    font-size: 14px;
-}
-.statement h2 {
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-.statement p {
-    margin: 6px 0;
-}
-.statement .line {
-    display: flex;
-    justify-content: space-between;
-}
-.total {
-    font-weight: 600;
-    margin-top: 8px;
-}
+        .payment-option:hover {
+            border-color: #7c3aed;
+            background: #fafafa;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
+        }
 
-/* RODAPÉ */
-footer {
-    background: #000;
-    color: #fff;
-    text-align: center;
-    padding: 20px 14px;
-    font-size: 13px;
-    line-height: 1.6;
-}
-</style>
+        .payment-option:active {
+            transform: translateY(-1px);
+        }
+
+        .payment-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            gap: 16px;
+        }
+
+        /* PIX STYLES */
+        .pix-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .pix-badge {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+        }
+
+        .pix-logo {
+            width: 48px;
+            height: 48px;
+            fill: white;
+        }
+
+        .pix-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .pix-info p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* CARD STYLES */
+        .card-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-badge {
+            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            fill: white;
+        }
+
+        .card-info {
+            text-align: left;
+        }
+
+        .card-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .card-info p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .card-flags {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .card-flag {
+            height: 24px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .flag-visa {
+            background: linear-gradient(135deg, #1a1f71 0%, #0d1250 100%);
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        .flag-mastercard {
+            width: 40px;
+            height: 24px;
+            position: relative;
+        }
+
+        .flag-mastercard::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #eb001b;
+            border-radius: 50%;
+            left: 4px;
+            top: 4px;
+            opacity: 0.8;
+        }
+
+        .flag-mastercard::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #f79e1b;
+            border-radius: 50%;
+            right: 4px;
+            top: 4px;
+            opacity: 0.8;
+        }
+
+        .flag-elo {
+            background: linear-gradient(135deg, #0033a0 0%, #001f5c 100%);
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .flag-amex {
+            background: linear-gradient(135deg, #006fcf 0%, #004a8f 100%);
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 9px;
+        }
+
+        .payment-arrow {
+            font-size: 1.5rem;
+            color: #7c3aed;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-option:hover .payment-arrow {
+            transform: translateX(5px);
+        }        /* RESUMO DA TRANSAÇÃO */
+        .transaction-summary {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 28px;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e5e5e5;
+        }
+
+        .transaction-summary h2 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .transaction-summary h2::before {
+            content: '📋';
+            font-size: 1.5rem;
+        }
+
+        .summary-field {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #333;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .summary-field:last-of-type {
+            border-bottom: none;
+        }
+
+        .summary-field strong {
+            font-weight: 600;
+            color: #1a1a1a;
+            display: inline-block;
+            min-width: 100px;
+        }
+
+        .summary-divider {
+            border: none;
+            border-top: 2px solid #e5e5e5;
+            margin: 20px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #7c3aed;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 2px solid #7c3aed;
+        }
+
+        .plan-details {
+            margin-top: 20px;
+            background: #f9f9ff;
+            padding: 16px;
+            border-radius: 12px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .plan-details h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .plan-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .plan-details li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 0.9rem;
+            color: #333;
+        }
+
+        .plan-details li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #7c3aed;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .observation {
+            margin-top: 20px;
+            padding: 16px;
+            background: #fff9e6;
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            font-size: 0.85rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .observation strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .cnpj {
+            margin-top: 16px;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            padding-top: 16px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .cnpj strong {
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* MENSAGEM DE ERRO FLUTUANTE */
+        .error-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #dc3545;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            animation: fadeInOut 3s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; transform: translate(-50%, -60%); }
+            10%, 90% { opacity: 1; transform: translate(-50%, -50%); }
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 480px) {
+            .welcome-message {
+                font-size: 1.1rem;
+                padding: 0 16px;
+            }
+
+            .payment-option {
+                padding: 20px;
+            }
+
+            .pix-logo,
+            .card-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .card-flags {
+                flex-wrap: wrap;
+            }
+
+            .transaction-summary {
+                padding: 20px;
+            }
+
+            .summary-row {
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-<header>
-    <div class="header-container">
-        <img src="logo.webp" alt="Fatal Model">
-    </div>
-</header>
-
-<div class="container">
-
-    <h1>Pagamento via PIX</h1>
-    <p class="subtitle">Plano VIP Vitalício • Pagamento único</p>
-
-    <div class="steps">
-        <p><strong>1.</strong> Copie a chave PIX abaixo.</p>
-        <p><strong>2.</strong> Acesse o aplicativo do seu banco.</p>
-        <p><strong>3.</strong> Vá em PIX → Copia e Cola e finalize o pagamento.</p>
-    </div>
-
-    <div class="pix-box" id="pixKey">
-00020126980014br.gov.bcb.pix01225749725@vakinha.com.br0250Compra do plano vip vitalicio da fatal model espec52040000530398654045.995802BR5911Fatal model6009Sao Paulo62070503***63047D62
-    </div>
-
-    <button class="copy-btn" onclick="copyPix()">Copiar chave PIX</button>
-
-    <div class="qr">
-        <img src="qr.webp" alt="QR Code PIX">
-        <p>Escaneie o QR Code se preferir</p>
-    </div>
-
-    <div class="timer" id="timer">Tempo restante: 05:00</div>
-
-    <!-- EXTRATO -->
-    <div class="statement">
-        <h2>Resumo da Transação</h2>
-
-        <p><strong>Nome:</strong> <span id="nome"></span></p>
-        <p><strong>Telefone:</strong> <span id="telefone"></span></p>
-        <p><strong>E-mail:</strong> xxxxxxx@xxxxx.com</p>
-
-        <hr>
-
-        <div class="line">
-            <span>Taxa</span>
-            <span>R$ 0,00</span>
+    <!-- CABEÇALHO -->
+    <header>
+        <div class="header-container">
+            <img src="logo.webp" alt="Fabi">
         </div>
-        <div class="line total">
-            <span>Valor total</span>
-            <span>R$ 5,99</span>
-        </div>
+    </header>
 
-        <hr>
-
-        <p><strong>Detalhes do Plano:</strong></p>
-        <p>
-            • Selo VIP de destaque<br>
-            • Prioridade em anúncios<br>
-            • Participação em promoções e sorteios<br>
-            • Maior visibilidade no perfil
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-container">
+        <!-- Mensagem de boas-vindas com nome via URL -->
+        <p class="welcome-message" id="welcomeText">
+            Olá <strong id="userName">Visitante</strong>, escolha o método de pagamento abaixo que você preferir
         </p>
 
-        <p><strong>Observação:</strong> O pagamento é efetuado
-        <strong>somente uma vez</strong>, sem cobranças mensais ou renovações automáticas.</p>
+        <!-- Menu de Pagamento -->
+        <div class="payment-menu">
+            <!-- Opção PIX -->
+            <a href="#" class="payment-option" id="pixOption">
+                <div class="payment-content">
+                    <div class="pix-container">
+                        <div class="pix-badge">
+                            <svg class="pix-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M24 4C12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20S35.046 4 24 4zm0 36c-8.837 0-16-7.163-16-16S15.163 8 24 8s16 7.163 16 16-7.163 16-16 16z"/>
+                                <path d="M24 12c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12z"/>
+                                <path d="M24 16c-4.418 0-8 3.582-8 8s3.582 8 8 8 8-3.582 8-8-3.582-8-8-8z"/>
+                                <path d="M24 20c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4z"/>
+                                <rect x="22" y="18" width="4" height="4" rx="1"/>
+                                <rect x="22" y="26" width="4" height="4" rx="1"/>
+                                <rect x="18" y="22" width="4" height="4" rx="1"/>
+                                <rect x="26" y="22" width="4" height="4" rx="1"/>
+                            </svg>
+                        </div>
+                        <div class="pix-info">
+                            <h3>PAGUE VIA PIX QR CODE</h3>
+                            <p>Pagamento instantâneo e seguro</p>
+                        </div>
+                    </div>
+                </div>
+                <span class="payment-arrow">→</span>
+            </a>
 
-        <p><strong>CNPJ:</strong> 37.181.811/0001-46</p>
+            <!-- Opção Cartão de Crédito -->
+            <a href="#" class="payment-option" id="cardOption">
+                <div class="payment-content">
+                    <div class="card-container">
+                        <div class="card-badge">
+                            <svg class="card-icon" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="10" width="40" height="28" rx="3" fill="white" fill-opacity="0.2"/>
+                                <rect x="4" y="18" width="40" height="4" fill="white" fill-opacity="0.3"/>
+                                <rect x="8" y="28" width="12" height="6" rx="1" fill="white" fill-opacity="0.4"/>
+                            </svg>
+                        </div>
+                        <div class="card-info">
+                            <h3>PAGUE COM CARTAO DE CREDITO</h3>
+                            <p>pague no cartão e até 3x de R$ 6,67 sem juros</p>
+                            <div class="card-flags">
+                                <div class="card-flag flag-visa">VISA</div>
+                                <div class="card-flag flag-mastercard"></div>
+                                <div class="card-flag flag-elo">ELO</div>
+                                <div class="card-flag flag-amex">AMEX</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="payment-arrow">→</span>
+            </a>
+        </div>        <!-- Resumo da Transação -->
+        <div class="transaction-summary">
+            <h2>Resumo da Transação</h2>
+            
+            <div class="summary-field">
+                <strong>Nome:</strong> <span id="summaryName">—</span>
+            </div>
+            <div class="summary-field">
+                <strong>Telefone:</strong> <span id="summaryPhone">—</span>
+            </div>
+            <div class="summary-field">
+                <strong>E-mail:</strong> xxxxxxx@xxxxx.com
+            </div>
+            
+            <hr class="summary-divider">
+            
+            <div class="summary-row">
+                <span>Taxa</span>
+                <span>R$ 0,00</span>
+                <span>R$ 0,00</span>
+            </div>
+            <div class="summary-row total">
+                <span>Valor total</span>
+                <span>R$ 19,99</span>
+            </div>
+            
+            <div class="plan-details">
+                <h3>Detalhes do Plano:</h3>
+                <ul>
+                    <li>Selo VIP de destaque</li>
+                    <li>Prioridade em anúncios</li>
+                    <li>Participação em promoções e sorteios</li>
+                    <li>Maior visibilidade no perfil</li>
+                </ul>
+            </div>
+            
+            <div class="observation">
+                <strong>Observação:</strong> O pagamento é efetuado <strong>somente uma vez</strong>, sem cobranças mensais ou renovações automáticas.
+            </div>
+            
+            <div class="cnpj">
+                <strong>CNPJ:</strong> 37.181.811/0001-46
+            </div>
+        </div>
+    </main>
+
+    <!-- Notificação de Erro Flutuante -->
+    <div class="error-notification" id="errorNotification">
+        Dados inválidos. Por favor, verifique as informações.
     </div>
 
-</div>
+    <script>
+        function getUrlParameter(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
 
-<footer>
-    © 2026 Fatal Model <br>
-    Pagamento seguro via PIX <br>
-    WhatsApp: (11) 94533-6003
-</footer>
+        function buildUrlWithParams(baseUrl, params) {
+            const urlParams = new URLSearchParams();
+            for (const [key, value] of Object.entries(params)) {
+                if (value) {
+                    urlParams.append(key, value);
+                }
+            }
+            const queryString = urlParams.toString();
+            return queryString ? `${baseUrl}?${queryString}` : baseUrl;
+        }
 
-<script>
-/* PEGAR PARÂMETROS */
-const params = new URLSearchParams(window.location.search);
-document.getElementById("nome").textContent = params.get("nome") || "—";
-document.getElementById("telefone").textContent = params.get("telefone") || "—";
+        function showErrorNotification(message) {
+            const notification = document.getElementById('errorNotification');
+            notification.textContent = message;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
 
-/* COPIAR PIX */
-function copyPix() {
-    const text = document.getElementById("pixKey").innerText.trim();
-    navigator.clipboard.writeText(text).then(() => {
-        alert("Chave PIX copiada com sucesso!");
-    });
-}
-document.getElementById("pixKey").addEventListener("click", copyPix);
+        function init() {
+            try {
+                const nome = getUrlParameter('nome');
+                const telefone = getUrlParameter('telefone');
+                
+                if (nome && nome.trim() !== '') {
+                    const decodedNome = decodeURIComponent(nome);
+                    document.getElementById('userName').textContent = decodedNome;
+                    document.getElementById('summaryName').textContent = decodedNome;
+                }
+                
+                if (telefone && telefone.trim() !== '') {
+                    const decodedTelefone = decodeURIComponent(telefone);
+                    document.getElementById('summaryPhone').textContent = decodedTelefone;
+                }
 
-/* TIMER */
-let time = 300;
-const timerEl = document.getElementById("timer");
-setInterval(() => {
-    const m = String(Math.floor(time / 60)).padStart(2, '0');
-    const s = String(time % 60).padStart(2, '0');
-    timerEl.textContent = `Tempo restante: ${m}:${s}`;
-    if (time > 0) time--;
-}, 1000);
-</script>
+                const pixOption = document.getElementById('pixOption');
+                const cardOption = document.getElementById('cardOption');
+                
+                const params = { nome: nome, telefone: telefone };
+                
+                pixOption.href = buildUrlWithParams('pix.html', params);
+                cardOption.href = buildUrlWithParams('73bf8nf8r.html', params);
 
+            } catch (error) {
+                console.error('Erro ao processar parâmetros da URL:', error);
+                showErrorNotification('Erro ao carregar dados. Tente novamente.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>

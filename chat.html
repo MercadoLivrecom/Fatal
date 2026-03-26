@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chat com Lorrana</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #000;
+      height: 100vh;
+      overflow: hidden;
+      color: #e5e5e5;
+      font-size: 16px;
+    }
+    
+    /* Cabeçalho do chat - FIXO */
+    .chat-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: #000;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      z-index: 100;
+      height: 60px;
+      border-bottom: 1px solid #222;
+    }
+    
+    .header-back {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      color: #e5e5e5;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    
+    .profile-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 12px;
+      border: 1px solid #333;
+      background-color: #333;
+    }
+    
+    .chat-title {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .name {
+      font-weight: 600;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      color: #e5e5e5;
+    }
+    
+    .status {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 2px;
+      color: #a8a8a8;
+    }
+    
+    .verified-badge {
+      background-color: #075e54;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      margin-left: 4px;
+      margin-top: 2px;
+    }
+    
+    /* Mensagem de segurança - FIXA */
+    .security-message {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      background-color: #1a1a1a;
+      color: #ffcc00;
+      padding: 10px 16px;
+      border-radius: 0;
+      font-size: 13px;
+      line-height: 1.4;
+      border-left: 3px solid #ffcc00;
+      z-index: 99;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    
+    /* Container de mensagens - FIXO ENTRE CABEÇALHO E INPUT */
+    .chat-container {
+      position: fixed;
+      top: 120px;
+      bottom: 60px;
+      width: 100%;
+      overflow-y: auto;
+      padding: 10px;
+      background-color: #000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .message-date {
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      margin: 10px 0;
+      position: relative;
+    }
+    
+    .message-date::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: #222;
+      z-index: 0;
+    }
+    
+    .message-date span {
+      background-color: #1a1a1a;
+      padding: 0 12px;
+      z-index: 1;
+      position: relative;
+    }
+    
+    .message {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 18px;
+      line-height: 1.4;
+      position: relative;
+      word-wrap: break-word;
+      clear: both;
+      background-color: #1a1a1a;
+      margin: 4px 0;
+    }
+    
+    .bot {
+      background-color: #242424;
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+    
+    .user {
+      background-color: #008069;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+    
+    .timestamp {
+      font-size: 10px;
+      color: #999;
+      margin-top: 4px;
+      text-align: right;
+    }
+    
+    .options-container {
+      background-color: #242424;
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #333;
+    }
+    
+    .option {
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin: 4px 0;
+      background-color: #2c2c2c;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      font-size: 14px;
+      color: #e5e5e5;
+    }
+    
+    .option:hover {
+      background-color: #3a3a3a;
+    }
+    
+    .error-message {
+      color: #ff5555;
+      font-size: 12px;
+      margin-top: 4px;
+      padding: 4px 8px;
+      background-color: #331a1a;
+      border-radius: 4px;
+      display: none;
+    }
+    
+    /* Área de entrada - FIXA NA PARTE DE BAIXO */
+    .input-area {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 8px 16px;
+      background-color: #121212;
+      border-top: 1px solid #222222;
+      z-index: 100;
+      height: 60px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .message-input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background-color: #222222;
+      color: #e5e5e5;
+      margin-right: 8px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    
+    .message-input::placeholder {
+      color: #777;
+    }
+    
+    .send-button {
+      background-color: #00d673;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+      font-size: 20px;
+    }
+    
+    .send-button:hover {
+      background-color: #00c165;
+    }
+    
+    .send-button:disabled {
+      background-color: #444;
+      cursor: not-allowed;
+    }
+    
+    /* Formulário de relato - OVERLAY */
+    .report-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      display: none;
+    }
+    
+    .report-form {
+      background-color: #121212;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      border: 1px solid #222;
+    }
+    
+    .report-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #00d673;
+    }
+    
+    .form-group {
+      margin-bottom: 15px;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #e5e5e5;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      font-size: 14px;
+      background-color: #222222;
+      color: #e5e5e5;
+    }
+    
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    
+    .submit-button {
+      background-color: #00d673;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .submit-button:hover {
+      background-color: #00c165;
+    }
+    
+    .success-message {
+      background-color: #004d33;
+      color: #00d673;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+      border: 1px solid #008069;
+    }
+    
+    .close-button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <!-- Cabeçalho do chat - FIXO -->
+  <div class="chat-header">
+    <div class="header-back">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M15 19L8 12L15 5V19Z" fill="#e5e5e5"/>
+      </svg>
+    </div>
+    <img src="hero.webp" alt="Lorrana" class="profile-img">
+    <div class="chat-title">
+      <div class="name">
+        Lorrana 
+        <span class="verified-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          </svg>
+        </span>
+      </div>
+      <div class="status">
+        online
+      </div>
+    </div>
+  </div>
+  
+  <!-- Mensagem de segurança -->
+  <div class="security-message">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 3px;">
+      <path d="M12 1L2 5V19L12 23L22 19V5L12 1ZM12 19L7 17V11L12 13L17 11V17L12 19Z" fill="#ffcc00"/>
+    </svg>
+    As mensagens que você envia nesta conversa são protegidas com a criptografia de ponta a ponta. Nem mesmo o Chat pode ler, ouvir ou compartilhar essas mensagens. Saiba mais
+  </div>
+  
+  <!-- Container de mensagens -->
+  <div class="chat-container" id="chatContainer">
+    <div class="message-date">
+      <span>6 de janeiro de 2026</span>
+    </div>
+    <div class="message bot">
+      Olá! Sou a Lorrana, assistente virtual. Qual é o seu nome?
+    </div>
+  </div>
+  
+  <!-- Área de entrada - APENAS CAMPO DE TEXTO E BOTÃO DE ENVIO -->
+  <div class="input-area">
+    <input type="text" id="messageInput" class="message-input" 
+           placeholder="Digite seu nome..." maxlength="24">
+    <div class="error-message" id="errorMessage">
+      O nome deve ter no máximo 24 caracteres
+    </div>
+    <button class="send-button" id="sendButton" onclick="sendMessage()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="white"/>
+      </svg>
+    </button>
+  </div>
+  
+  <!-- Formulário de relato -->
+  <div class="report-overlay" id="reportOverlay">
+    <div class="report-form">
+      <div class="close-button" onclick="closeReportForm()">&times;</div>
+      <h2 class="report-title">Relatar um Problema</h2>
+      
+      <div class="form-group">
+        <label for="reportName">Seu nome</label>
+        <input type="text" id="reportName" maxlength="24" placeholder="Digite seu nome">
+      </div>
+      
+      <div class="form-group">
+        <label for="reportEmail">Seu e-mail</label>
+        <input type="email" id="reportEmail" placeholder="seu@email.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="reportProblem">Descreva o problema</label>
+        <textarea id="reportProblem" placeholder="Descreva detalhadamente o problema que está enfrentando..."></textarea>
+      </div>
+      
+      <button class="submit-button" onclick="submitReport()">Enviar Relato</button>
+      
+      <div class="success-message" id="successMessage">
+        Mensagem enviada com sucesso! Em até 15 dias entraremos em contato.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Estado do chat
+    let chatState = 'waitingForName';
+    let userName = '';
+    
+    // Elementos do DOM
+    const chatContainer = document.getElementById('chatContainer');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const errorMessage = document.getElementById('errorMessage');
+    const reportOverlay = document.getElementById('reportOverlay');
+    
+    // Inicialização
+    window.onload = function() {
+      messageInput.focus();
+      
+      // Forçar rolagem para o final
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 300);
+    };
+    
+    // Enviar mensagem ao pressionar Enter
+    messageInput.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    
+    // Função principal de envio de mensagem
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      
+      if (!message) return;
+      
+      // Adicionar mensagem do usuário
+      addMessage(message, 'user');
+      messageInput.value = '';
+      
+      // Processar a mensagem com base no estado atual
+      if (chatState === 'waitingForName') {
+        handleNameInput(message);
+      } 
+      else if (chatState === 'waitingForOption') {
+        handleOptionSelection(message);
+      }
+      
+      // Rolagem automática para a última mensagem
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 100);
+    }
+    
+    // Adicionar mensagem ao chat
+    function addMessage(text, sender) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${sender}`;
+      
+      // Obter hora atual
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const timeString = `${hours}:${minutes}`;
+      
+      messageDiv.innerHTML = `
+        ${text}
+        <div class="timestamp">${timeString}</div>
+      `;
+      
+      chatContainer.appendChild(messageDiv);
+    }
+    
+    // Tratar entrada do nome
+    function handleNameInput(name) {
+      // Validar comprimento do nome
+      if (name.length > 24) {
+        errorMessage.style.display = 'block';
+        messageInput.style.borderColor = '#ff5555';
+        
+        // Resetar após 3 segundos
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+          messageInput.style.borderColor = '';
+        }, 3000);
+        
+        return;
+      }
+      
+      // Salvar nome do usuário
+      userName = name;
+      
+      // Responder com as opções
+      const optionsMessage = `
+        Olá, ${userName}! 😊 Como posso ajudar você hoje?<br><br>
+        <div class="options-container">
+          <div class="option" onclick="selectOption('1')">1. Pagamentos e reembolso</div>
+          <div class="option" onclick="selectOption('2')">2. Tempo de aprovação de verificação</div>
+          <div class="option" onclick="selectOption('3')">3. Por que não ganhei ainda meu verificado</div>
+          <div class="option" onclick="selectOption('4')">4. Meu pagamento não foi aprovado</div>
+          <div class="option" onclick="selectOption('5')">5. Quanto tempo leva para o plano ativar</div>
+          <div class="option" onclick="selectOption('6')">6. Relatar um problema</div>
+        </div>
+      `;
+      
+      // Adicionar mensagem do bot
+      addMessage(optionsMessage, 'bot');
+      
+      // Atualizar estado
+      chatState = 'waitingForOption';
+      messageInput.placeholder = "Digite o número da opção...";
+      
+      // Forçar rolagem
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 100);
+    }
+    
+    // Selecionar opção
+    function selectOption(option) {
+      messageInput.value = option;
+      sendMessage();
+    }
+    
+    // Tratar seleção de opção
+    function handleOptionSelection(option) {
+      let response = '';
+      
+      switch(option) {
+        case '1':
+          response = "Para pagamentos e reembolsos, o prazo varia de 3 a 5 dias úteis após a confirmação do pagamento. Caso tenha dúvidas específicas, posso te ajudar com mais detalhes.";
+          break;
+        case '2':
+          response = "O tempo médio para aprovação da verificação é de 24 a 48 horas úteis após o envio de todos os documentos necessários.";
+          break;
+        case '3':
+          response = "O selo de verificação é concedido após análise completa do perfil. Verifique se você preencheu todos os requisitos e aguarde o processo de análise, que pode levar até 7 dias.";
+          break;
+        case '4':
+          response = "Se seu pagamento não foi aprovado, verifique com seu banco se há restrições ou se os dados do cartão estão corretos. Você pode tentar novamente ou usar outro método de pagamento.";
+          break;
+        case '5':
+          response = `⏰ <b>Tempo de ativação do seu plano</b><br><br>
+          Entendo sua ansiedade para ativar seu plano! 😊<br><br>
+          Atualmente, devido ao grande volume de solicitações, o processo de ativação pode levar <b>até 2 dias úteis</b> após a confirmação do pagamento.<br><br>
+          Isso acontece porque temos muitas pessoas na fila esperando pela ativação e cada caso precisa ser analisado com cuidado para garantir que tudo seja feito corretamente.<br><br>
+          Não se preocupe, assim que seu pagamento for confirmado, entraremos em contato por e-mail para informar que seu plano já está ativo!<br><br>
+          Enquanto isso, você pode continuar usando nossos serviços gratuitos normalmente.<br><br>
+          Agradecemos sua paciência e compreensão!`;
+          break;
+        case '6':
+          openReportForm();
+          return;
+        default:
+          response = `Sou um robô e não reconheço esta mensagem. Por favor, escolha uma das opções abaixo:<br><br>
+            <div class="options-container">
+              <div class="option" onclick="selectOption('1')">1. Pagamentos e reembolso</div>
+              <div class="option" onclick="selectOption('2')">2. Tempo de aprovação de verificação</div>
+              <div class="option" onclick="selectOption('3')">3. Por que não ganhei ainda meu verificado</div>
+              <div class="option" onclick="selectOption('4')">4. Meu pagamento não foi aprovado</div>
+              <div class="option" onclick="selectOption('5')">5. Quanto tempo leva para o plano ativar</div>
+              <div class="option" onclick="selectOption('6')">6. Relatar um problema</div>
+            </div>`;
+      }
+      
+      // Adicionar resposta do bot
+      addMessage(response, 'bot');
+      
+      // Forçar rolagem
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 100);
+    }
+    
+    // Abrir formulário de relato
+    function openReportForm() {
+      reportOverlay.style.display = 'flex';
+      document.getElementById('reportName').value = userName;
+      chatState = 'reporting';
+    }
+    
+    // Fechar formulário de relato
+    function closeReportForm() {
+      reportOverlay.style.display = 'none';
+      chatState = 'waitingForOption';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Enviar relato
+    function submitReport() {
+      const name = document.getElementById('reportName').value.trim();
+      const email = document.getElementById('reportEmail').value.trim();
+      const problem = document.getElementById('reportProblem').value.trim();
+      const successMessage = document.getElementById('successMessage');
+      
+      // Validação
+      if (!name || !email || !problem) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
+      
+      // Mostrar mensagem de sucesso
+      successMessage.style.display = 'block';
+      
+      // Resetar formulário após 3 segundos
+      setTimeout(() => {
+        document.getElementById('reportName').value = '';
+        document.getElementById('reportEmail').value = '';
+        document.getElementById('reportProblem').value = '';
+        successMessage.style.display = 'none';
+        closeReportForm();
+        
+        // Mensagem de confirmação no chat
+        setTimeout(() => {
+          addMessage("Seu relato foi enviado com sucesso! Nossa equipe analisará seu caso e entrará em contato em até 15 dias úteis.", 'bot');
+          chatState = 'waitingForOption';
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
